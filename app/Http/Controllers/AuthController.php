@@ -12,19 +12,18 @@ class AuthController extends Controller
     ) {}
     //
     public function register(Request $request){
-        // try {
+        try {
             $result = $this->authService
                 ->driver($this->getAuthDriver($request))
                 ->register($request->all());
             if (empty($result)) {
-                // throw new \Exception('Registration failed.');
-                echo "failed";
+                throw new \Exception('Registration failed.');
             }
             return successResponse($result);
             
-        // } catch (\Exception $e) {
-        //     return errorResponse($e->getMessage());
-        // }
+        } catch (\Exception $e) {
+            return errorResponse($e->getMessage());
+        }
     }
 
     private function getAuthDriver($request){
