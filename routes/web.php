@@ -24,4 +24,5 @@ Route::prefix('{company}')
      ->middleware(\App\Http\Middleware\DetectCompany::class)
      ->group(function() {
          Route::post('/register', [AuthController::class, 'register']);
+         Route::post('/login', [AuthController::class, 'login']);
      });
