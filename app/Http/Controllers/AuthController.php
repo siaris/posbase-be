@@ -14,7 +14,7 @@ class AuthController extends Controller
     public function register(Request $request){
         try {
             $result = $this->authService
-                ->driver($this->getAuthDriver($request))
+                ->driver($this->_getAuthDriver($request))
                 ->register($request->all());
             if (empty($result)) {
                 throw new \Exception('Registration failed.');
@@ -26,7 +26,21 @@ class AuthController extends Controller
         }
     }
 
-    private function getAuthDriver($request){
+    public function login(Request $r){
+        try {
+            $result = $this->authService
+                ->driver('form')
+                ->login($r->all());
+            if (empty($result)) {
+                throw new \Exception('Login failed.');
+            }
+            return successResponse($result);
+        } catch (\Exception $e) {
+            return errorResponse($e->getMessage());
+        }
+    }
+
+    private function _getAuthDriver($request){
         if ($request->has('google_token')) return 'google';
         return 'form';
     }

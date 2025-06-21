@@ -26,8 +26,4 @@ class GoogleAuth implements AuthProviderInterface
 
         return ['token'=>$tokenLogin];
     }
-
-    private function checkUser(){
-
-    }
 }
