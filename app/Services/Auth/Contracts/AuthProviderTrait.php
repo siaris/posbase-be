@@ -6,8 +6,8 @@ use \App\Models\User;
 
 trait AuthProviderTrait
 {
-    public function cekUser(string $id): string {
-        $ada = User::where('email',$id)->first();
+    public function cekUser(string $id, $password = null): string {
+        $ada = $password !== null ? $this->_cekUser($id,$password) : User::where('email',$id)->first();
         if(!$ada)
             if (!User::insert([
                 'email' => $id,
@@ -16,6 +16,16 @@ trait AuthProviderTrait
                 'password' => md5(config('auth.default_password')),
                 ])) throw new \Exception('Failed to insert user');
         return $id;
+    }
+
+    private function _cekUser(string $id, string $password): ?User {
+        $r = User::where('email', $id)
+            ->where('password', md5($password))
+            ->first();
+        if(!$r) {
+            throw new \Exception('Invalid credentials');
+        }
+        return $r;
     }
 
     public function makeToken(string $id): string {

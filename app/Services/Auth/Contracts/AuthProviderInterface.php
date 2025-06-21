@@ -8,6 +8,6 @@ interface AuthProviderInterface
     // public function login(array $credentials): array;
     // public function getUser(): ?\App\Models\User;
 
-    public function cekUser(string $id): string; 
+    public function cekUser(string $id, ?string $password): string; 
     public function makeToken(string $id): string; 
 }
