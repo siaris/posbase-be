@@ -7,7 +7,7 @@ use \App\Models\User;
 trait AuthProviderTrait
 {
     public function cekUser(string $id, $password = null): string {
-        $ada = $password !== null ? $this->_cekUser($id,$password) : User::where('email',$id)->first();
+        $ada = $password !== null ? $this->_cekUser($id,$password) : $this->_cekUserOnlyEmail($id);
         if(!$ada)
             if (!User::insert([
                 'email' => $id,
@@ -21,6 +21,15 @@ trait AuthProviderTrait
     private function _cekUser(string $id, string $password): ?User {
         $r = User::where('email', $id)
             ->where('password', md5($password))
+            ->first();
+        if(!$r) {
+            throw new \Exception('Invalid credentials');
+        }
+        return $r;
+    }
+
+    private function _cekUserOnlyEmail(string $id): ?User {
+        $r = User::where('email', $id)
             ->first();
         if(!$r) {
             throw new \Exception('Invalid credentials');
