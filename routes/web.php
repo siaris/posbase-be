@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\InfoController;
+use App\Http\Controllers\MasterInventoryController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -25,4 +25,9 @@ Route::prefix('{company}')
      ->group(function() {
          Route::post('/register', [AuthController::class, 'register']);
          Route::post('/login', [AuthController::class, 'login']);
+         Route::middleware(\App\Http\Middleware\CheckBearerToken::class)
+         ->group(function(){
+            Route::match(['get', 'post'], '/master/formularium/{action?}/{id?}', [MasterInventoryController::class, 'formularium']);
+            Route::match(['get', 'post'], '/master/satuan/{action?}/{id?}', [MasterInventoryController::class, 'satuan']);
+         });
      });
